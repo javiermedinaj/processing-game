@@ -1,3 +1,5 @@
+PImage backgroundImage;
+
 float playerX, playerY;
 float playerSize = 50;
 float playerSpeedY = 0;
@@ -10,6 +12,8 @@ boolean gameOverFlag = false; // Bandera para el estado de Game Over
 
 void setup() {
   size(800, 600);
+  backgroundImage = loadImage("background1.jpg");
+  backgroundImage.resize(width, height);// Asegúrate de tener una imagen llamada "background.png" en la carpeta del proyecto
   initializeGame();
 }
 
@@ -25,7 +29,7 @@ void initializeGame() {
 }
 
 void draw() {
-  background(0);
+  background(backgroundImage);
 
   // Mover y dibujar el jugador
   movePlayer();
@@ -142,10 +146,12 @@ class Obstacle {
   float x, y;
   float size = 50;
   float speed = 5;
+  int type; // 0: Triángulo, 1: Círculo, 2: Polígono
 
   Obstacle() {
     x = width;
     y = height - size; // Asegurar que el obstáculo esté sobre el suelo
+    type = int(random(3)); // Elegir un tipo de obstáculo aleatorio
   }
 
   void move() {
@@ -154,7 +160,22 @@ class Obstacle {
 
   void draw() {
     fill(0, 0, 255);
-    // Ajustar la posición para que el triángulo esté alineado con el suelo
-    triangle(x, y + size, x + size, y + size, x + size / 2, y);
+    if (type == 0) {
+      // Triángulo
+      triangle(x, y + size, x + size, y + size, x + size / 2, y);
+    } else if (type == 1) {
+      // Círculo
+      ellipse(x + size / 2, y + size / 2, size, size);
+    } else if (type == 2) {
+      // Polígono (hexágono)
+      beginShape();
+      for (int i = 0; i < 6; i++) {
+        float angle = TWO_PI / 6 * i;
+        float px = x + size / 2 + cos(angle) * size / 2;
+        float py = y + size / 2 + sin(angle) * size / 2;
+        vertex(px, py);
+      }
+      endShape(CLOSE);
+    }
   }
 }
