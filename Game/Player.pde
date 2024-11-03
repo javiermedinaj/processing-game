@@ -69,4 +69,9 @@ public void move(ArrayList<Platform> platforms) {
         return x < obs.getX() + obs.getSize() && x + size > obs.getX() &&
                y < obs.getY() + obs.getSize() && y + size > obs.getY();
     }
+
+    public boolean checkCollision(Coin coin) {
+        return x < coin.getX() + coin.getSize() && x + size > coin.getX() &&
+               y < coin.getY() + coin.getSize() && y + size > coin.getY();
+    }
 }

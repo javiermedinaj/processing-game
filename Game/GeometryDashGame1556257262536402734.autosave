@@ -7,7 +7,6 @@ public class GeometryDashGame {
     private ArrayList<Obstacle> obstacles;
     private int score;
     private boolean gameOverFlag;
-    private boolean gameWon;
     private PImage backgroundImage;
     private PImage coinImage;
     private final float floorY = 550;
@@ -27,37 +26,20 @@ public class GeometryDashGame {
         coins = new ArrayList<>();
         score = 0;
         gameOverFlag = false;
-        gameWon = false;
 
-    obstacles.add(new TriangleObstacle(800, floorY - 50, 50, 5));
+        platforms.add(new Platform(2300, 450, 200, 20));
 
-    obstacles.add(new SpikeObstacle(1200, floorY - 1, 50, 5));
-    obstacles.add(new SpikeObstacle(1250, floorY - 1, 50, 5));;
+        coins.add(new Coin(500, 450, 50, coinImage));
 
-    platforms.add(new Platform(1600, 450, 300, 20));
-    obstacles.add(new SpikeObstacle(1700, 450 - 1, 40, 5));
-    obstacles.add(new SpikeObstacle(1750, 450 - 1, 40, 5));
-    coins.add(new Coin(1750, 350, 50, coinImage));
-   
-    
-    obstacles.add(new TriangleObstacle(2100, floorY - 50, 50, 5));
-    obstacles.add(new TriangleObstacle(2400, floorY - 50, 50, 5));
-
-    platforms.add(new Platform(2600, 450, 200, 20));
-    platforms.add(new Platform(2800, 350, 300, 20));
-    obstacles.add(new SpikeObstacle(2700, 450 - 1, 40, 5));
-    obstacles.add(new SpikeObstacle(2750, 450 - 1, 40, 5));
-    coins.add(new Coin(2750, 300, 50, coinImage));
-
-    obstacles.add(new SpikeObstacle(3200, floorY - 1, 50, 5));
-    obstacles.add(new TriangleObstacle(3250, floorY - 50, 50, 5));
-    platforms.add(new Platform(3500, 450, 150, 20));
-    obstacles.add(new SpikeObstacle(3600, 450 - 1, 40, 5));
-    obstacles.add(new SpikeObstacle(3500, floorY - 1, 50, 5));
-    obstacles.add(new TriangleObstacle(3550, floorY - 50, 50, 5));
-    obstacles.add(new TriangleObstacle(3600, floorY - 50, 50, 5));
-    coins.add(new Coin(3550, 350, 50, coinImage));
-
+        obstacles.add(new TriangleObstacle(800, floorY - 50, 50, 5));
+        obstacles.add(new RectangleObstacle(1200, floorY - 1, 50, 5));
+        obstacles.add(new TriangleObstacle(1600, floorY - 50, 50, 5));
+        obstacles.add(new SpikeObstacle(2000, floorY - 1, 50, 5));
+        obstacles.add(new SpikeObstacle(2500, floorY - 1, 50, 5));
+        obstacles.add(new SpikeObstacle(2550, floorY - 1, 50, 5));
+        obstacles.add(new SpikeObstacle(2700, floorY - 1, 50, 5));
+        obstacles.add(new SpikeObstacle(2800, floorY - 1, 50, 5));
+        obstacles.add(new SpikeObstacle(2900, floorY - 1, 50, 5));
     }
 
     public void updateGame() {
@@ -68,6 +50,7 @@ public class GeometryDashGame {
             moveCoins();
             checkCollisions();
             checkCoinCollection();
+            updateScore();
             checkGameEnd();
         }
     }
@@ -87,7 +70,7 @@ public class GeometryDashGame {
         for (Coin coin : coins) {
             if (!coin.isCollected() && player.checkCollision(coin)) {
                 coin.collect();
-                score += 10; 
+                score += 10;
             }
         }
     }
@@ -96,7 +79,7 @@ public class GeometryDashGame {
         if (!obstacles.isEmpty()) {
             Obstacle lastObstacle = obstacles.get(obstacles.size() - 1);
             if (player.getX() > lastObstacle.getX() + lastObstacle.getSize()) {
-                gameWin();
+                gameOver();
             }
         }
     }
@@ -118,7 +101,7 @@ public class GeometryDashGame {
         pg.line(0, floorY, width, floorY);
         pg.textSize(32);
         pg.fill(255);
-        pg.text("Score: " + score, 60, 40);
+        pg.text("Score: " + score, 20, 40);
         if (gameOverFlag) {
             displayRestartButton(pg);
         }
@@ -136,19 +119,15 @@ public class GeometryDashGame {
     }
 
     private void moveObstacles() {
-    for (Obstacle obs : obstacles) {
-        obs.move();
-        if (!obs.isScored() && player.getX() > obs.getX() + obs.getSize()) {
-            score += 5; 
-            obs.setScored(true); 
+        for (Obstacle obs : obstacles) {
+            obs.move();
+        }
+        for (int i = obstacles.size() - 1; i >= 0; i--) {
+            if (obstacles.get(i).getX() + obstacles.get(i).getSize() < 0) {
+                obstacles.remove(i);
+            }
         }
     }
-    for (int i = obstacles.size() - 1; i >= 0; i--) {
-        if (obstacles.get(i).getX() + obstacles.get(i).getSize() < 0) {
-            obstacles.remove(i);
-        }
-    }
-}
 
     private void checkCollisions() {
         for (Obstacle obs : obstacles) {
@@ -157,15 +136,15 @@ public class GeometryDashGame {
             }
         }
     }
-    public void gameOver() {
-        gameOverFlag = true;
-        gameWon = false;
-        noLoop();
+
+    private void updateScore() {
+        if (!gameOverFlag) {
+            score = frameCount / 60;
+        }
     }
 
-    public void gameWin() {
+    public void gameOver() {
         gameOverFlag = true;
-        gameWon = true;
         noLoop();
     }
 
@@ -173,23 +152,9 @@ public class GeometryDashGame {
         player.jump();
     }
 
-   public void displayRestartButton(PGraphics pg) {
+    public void displayRestartButton(PGraphics pg) {
         pg.textSize(32);
-        pg.textAlign(PGraphics.CENTER);
-        
-        if (gameWon) {
-            pg.fill(0, 255, 0); 
-            pg.text("You Win!", width / 2, height / 2);
-            pg.fill(255, 255, 0);
-            pg.text("Play Again?", width / 2, height / 2 + 50);
-        } else {
-            pg.fill(255, 0, 0);
-            pg.text("Game Over!", width / 2, height / 2);
-            pg.fill(255, 255, 0);
-            pg.text("Click to Try Again", width / 2, height / 2 + 50);
-        }
-        
-        pg.fill(255);
-        pg.text("Final Score: " + score, width / 2, height / 2 - 50);
+        pg.fill(255, 255, 0);
+        pg.text("Click to Restart", width / 2 - 100, height / 2 + 50);
     }
 }

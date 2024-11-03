@@ -1,5 +1,6 @@
 PImage backgroundImage;
 PImage cubeImage;
+PImage coinImage;
 GeometryDashGame game;
 
 void setup() {
@@ -7,7 +8,8 @@ void setup() {
     backgroundImage = loadImage("background1.jpg");
     backgroundImage.resize(width, height);
     cubeImage = loadImage("cube.png");
-    game = new GeometryDashGame(backgroundImage, cubeImage);
+    coinImage = loadImage("coin.png");
+    game = new GeometryDashGame(backgroundImage, cubeImage, coinImage);
 }
 
 void draw() {
