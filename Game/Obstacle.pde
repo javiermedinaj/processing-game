@@ -55,18 +55,7 @@ public class RectangleObstacle extends Obstacle {
     }
 }
 
-public class CircleObstacle extends Obstacle {
-    public CircleObstacle(float x, float y, float size, float speed) {
-        super(x, y, size, speed);
-    }
 
-    @Override
-    public void draw(PGraphics pg) {
-        pg.fill(0, 255, 0); 
-        pg.noStroke();
-        pg.ellipse(x + size / 2, y - size - 10, size / 2, size / 2); // Bola verde sobre el rectángulo
-    }
-}
 
 public class SpikeObstacle extends Obstacle {
     public SpikeObstacle(float x, float y, float size, float speed) {

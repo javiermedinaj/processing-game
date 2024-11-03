@@ -17,20 +17,38 @@ public class Player {
         this.cubeImage = cubeImage;
         this.rotationAngle = 0;
     }
+public float getX() {
+    return x;
+}
 
-    public void move() {
-        if (isJumping) {
-            speedY += gravity;
-            y += speedY;
-            rotationAngle += 0.1; 
-            if (y >= 550 - size) { 
-                y = 550 - size;
-                isJumping = false;
-                rotationAngle = 0; 
-            }
+public void move(ArrayList<Platform> platforms) {
+    if (isJumping) {
+        speedY += gravity;
+        y += speedY;
+        rotationAngle += 0.1;
+    }
+
+    boolean onPlatform = false;
+    for (Platform platform : platforms) {
+        if (y + size >= platform.getY() && y + size <= platform.getY() + platform.getHeight() && x + size > platform.getX() && x < platform.getX() + platform.getWidth()) {
+            y = platform.getY() - size;
+            isJumping = false;
+            rotationAngle = 0;
+            onPlatform = true;
+            break;
         }
     }
 
+    if (!onPlatform) {
+        if (y >= 550 - size) {
+            y = 550 - size;
+            isJumping = false;
+            rotationAngle = 0;
+        } else {
+            isJumping = true;
+        }
+    }
+}
     public void jump() {
         if (!isJumping) {
             speedY = -12;
