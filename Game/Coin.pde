@@ -1,6 +1,3 @@
-import processing.core.PGraphics;
-import processing.core.PImage;
-
 public class Coin {
     private float x, y, size;
     private boolean collected;

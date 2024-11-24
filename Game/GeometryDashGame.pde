@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import processing.core.PGraphics;
-import processing.core.PImage;
 
 public class GeometryDashGame {
     private Player player;
@@ -19,8 +17,8 @@ public class GeometryDashGame {
         this.coinImage = coinImage;
         initializeGame(cubeImage);
     }
-
-    public void initializeGame(PImage cubeImage) {
+    
+ public void initializeGame(PImage cubeImage) {
         player = new Player(100, floorY - 50, 50, cubeImage);
         obstacles = new ArrayList<>();
         platforms = new ArrayList<>();
@@ -30,25 +28,20 @@ public class GeometryDashGame {
         gameWon = false;
 
     obstacles.add(new TriangleObstacle(800, floorY - 50, 50, 5));
-
     obstacles.add(new SpikeObstacle(1200, floorY - 1, 50, 5));
     obstacles.add(new SpikeObstacle(1250, floorY - 1, 50, 5));;
-
-    platforms.add(new Platform(1600, 450, 300, 20));
+    obstacles.add(new RectangleObstacle(1500, floorY - 1, 50, 5));  
+    platforms.add(new Platform(1500, 450, 300, 20));
     obstacles.add(new SpikeObstacle(1700, 450 - 1, 40, 5));
     obstacles.add(new SpikeObstacle(1750, 450 - 1, 40, 5));
-    coins.add(new Coin(1750, 350, 50, coinImage));
-   
-    
+    coins.add(new Coin(1750, 350, 50, coinImage));  
     obstacles.add(new TriangleObstacle(2100, floorY - 50, 50, 5));
     obstacles.add(new TriangleObstacle(2400, floorY - 50, 50, 5));
-
     platforms.add(new Platform(2600, 450, 200, 20));
     platforms.add(new Platform(2800, 350, 300, 20));
     obstacles.add(new SpikeObstacle(2700, 450 - 1, 40, 5));
     obstacles.add(new SpikeObstacle(2750, 450 - 1, 40, 5));
     coins.add(new Coin(2750, 300, 50, coinImage));
-
     obstacles.add(new SpikeObstacle(3200, floorY - 1, 50, 5));
     obstacles.add(new TriangleObstacle(3250, floorY - 50, 50, 5));
     platforms.add(new Platform(3500, 450, 150, 20));
@@ -57,8 +50,7 @@ public class GeometryDashGame {
     obstacles.add(new TriangleObstacle(3550, floorY - 50, 50, 5));
     obstacles.add(new TriangleObstacle(3600, floorY - 50, 50, 5));
     coins.add(new Coin(3550, 350, 50, coinImage));
-
-    }
+  }
 
     public void updateGame() {
         if (!gameOverFlag) {

@@ -1,6 +1,4 @@
-import processing.core.PGraphics;
-
-public abstract class Obstacle {
+public class Obstacle implements ObstacleInterface {
     protected float x, y, size, speed;
     protected boolean scored;  
 
@@ -12,55 +10,38 @@ public abstract class Obstacle {
         this.scored = false;
     }
 
+    @Override
     public void move() {
         x -= speed;
     }
 
-    public abstract void draw(PGraphics pg);
+    @Override
+    public void draw(PGraphics pg) {
+        // Metodo para subclases como el del rectangulo / triangulo y el spike
+    }
 
+    @Override
     public float getX() {
         return x;
     }
 
+    @Override
     public float getY() {
         return y;
     }
 
+    @Override
     public float getSize() {
         return size;
     }
     
-        public boolean isScored() {
+    @Override
+    public boolean isScored() {
         return scored;
     }
 
+    @Override
     public void setScored(boolean scored) {
         this.scored = scored;
-    }
-}
-
-public class TriangleObstacle extends Obstacle {
-    public TriangleObstacle(float x, float y, float size, float speed) {
-        super(x, y, size, speed);
-    }
-
-    @Override
-    public void draw(PGraphics pg) {
-        pg.fill(0, 0, 255);
-        pg.noStroke();
-        pg.triangle(x, y + size, x + size, y + size, x + size / 2, y);
-    }
-}
-
-public class SpikeObstacle extends Obstacle {
-    public SpikeObstacle(float x, float y, float size, float speed) {
-        super(x, y, size, speed);
-    }
-
-    @Override
-    public void draw(PGraphics pg) {
-        pg.fill(0); 
-        pg.noStroke();
-        pg.triangle(x, y, x + size, y, x + size / 2, y - size); 
     }
 }

@@ -1,5 +1,4 @@
-import processing.core.PGraphics;
-import processing.core.PImage;
+import java.util.ArrayList;
 
 public class Player {
     private float x, y, size, speedY;
@@ -17,38 +16,40 @@ public class Player {
         this.cubeImage = cubeImage;
         this.rotationAngle = 0;
     }
-public float getX() {
-    return x;
-}
 
-public void move(ArrayList<Platform> platforms) {
-    if (isJumping) {
-        speedY += gravity;
-        y += speedY;
-        rotationAngle += 0.1;
+    public float getX() {
+        return x;
     }
 
-    boolean onPlatform = false;
-    for (Platform platform : platforms) {
-        if (y + size >= platform.getY() && y + size <= platform.getY() + platform.getHeight() && x + size > platform.getX() && x < platform.getX() + platform.getWidth()) {
-            y = platform.getY() - size;
-            isJumping = false;
-            rotationAngle = 0;
-            onPlatform = true;
-            break;
+    public void move(ArrayList<Platform> platforms) {
+        if (isJumping) {
+            speedY += gravity;
+            y += speedY;
+            rotationAngle += 0.1;
+        }
+
+        boolean onPlatform = false;
+        for (Platform platform : platforms) {
+            if (y + size >= platform.getY() && y + size <= platform.getY() + platform.getHeight() && x + size > platform.getX() && x < platform.getX() + platform.getWidth()) {
+                y = platform.getY() - size;
+                isJumping = false;
+                rotationAngle = 0;
+                onPlatform = true;
+                break;
+            }
+        }
+
+        if (!onPlatform) {
+            if (y >= 550 - size) {
+                y = 550 - size;
+                isJumping = false;
+                rotationAngle = 0;
+            } else {
+                isJumping = true;
+            }
         }
     }
 
-    if (!onPlatform) {
-        if (y >= 550 - size) {
-            y = 550 - size;
-            isJumping = false;
-            rotationAngle = 0;
-        } else {
-            isJumping = true;
-        }
-    }
-}
     public void jump() {
         if (!isJumping) {
             speedY = -12;

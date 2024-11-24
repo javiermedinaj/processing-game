@@ -1,5 +1,3 @@
-import processing.core.PGraphics;
-
 public class Platform {
     private float x, y, width, height;
 
